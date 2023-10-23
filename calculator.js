@@ -5,41 +5,61 @@
 // Print the result to the terminal.
 
 let rlSync = require("readline-sync");
-let messages = require("./calculator_messages.json");
+const MESSAGES = require("./calculator_messages.json");
+let languageChoice = rlSync.question(
+  'Please enter "english" if you would like to continue in English.\nIngrese "espanol" si desea continuar en espanol.'
+);
+let language;
+let valid;
+do {
+  if (languageChoice === "english") {
+    language = 0;
+    valid = true;
+  } else if (languageChoice === "espanol") {
+    language = 1;
+    valid = true;
+  } else {
+    console.log(
+      'Please enter "english" or "espanol\nPor favor ingresa "english" o "espanol"'
+    );
+    valid = false;
+  }
+} while (!valid);
 
 let keepGoing = "n";
 
 do {
   function prompt(message) {
+    //Adds "=>" to indicate output
     message = `=>` + message;
     return message;
   }
   function invalidNumber(number) {
+    //Tests user input for valid number
     return number.trimStart() === "" || Number.isNaN(Number(number));
   }
 
-  console.log("Welcome to the Calculator!");
-  let firstNum = rlSync.question(prompt("What's the first number?\n")); //Get first number and test for validation
+  console.log(MESSAGES[language]["welcome"]);
+  let firstNum = rlSync.question(
+    prompt(MESSAGES[language]["firstNumberPrompt"])
+  ); //Get first number and test for validation
   while (invalidNumber(firstNum)) {
-    firstNum = rlSync.question(
-      prompt(`Hmm... that doesn't look like a valid number.\n`)
-    );
+    firstNum = rlSync.question(prompt(MESSAGES[language]["invalidNumber"]));
   }
 
-  let secondNum = rlSync.question(prompt("What's the second number?\n")); //Get second number and test for validation
+  let secondNum = rlSync.question(
+    prompt(MESSAGES[language]["secondNumberPrompt"])
+  ); //Get second number and test for validation
   while (invalidNumber(secondNum)) {
-    secondNum = rlSync.question(
-      prompt(`Hmm... that doesn't look like a valid number.\n`)
-    );
+    secondNum = rlSync.question(prompt(MESSAGES[language]["invalidNumber"]));
   }
 
   let operation = rlSync.question(
-    prompt(
-      "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide\n"
-    )
+    prompt(MESSAGES[language]["operationPrompt"])
   ); //Get operation
   while (!["1", "2", "3", "4"].includes(operation)) {
-    operation = rlSync.question(prompt("Must choose 1, 2, 3 or 4\n"));
+    //Tests user input for valid operator selection
+    operation = rlSync.question(prompt(MESSAGES[language]["invalidOperation"]));
   }
 
   let result;
@@ -58,26 +78,26 @@ do {
     return Number(num1) / Number(num2);
   }
 
-  switch (operation) {
+  switch (
+    operation //Executes user operation choice
+  ) {
     case "1":
       result = add(firstNum, secondNum);
-      console.log(prompt(`The result is: ${result}`));
+      console.log(prompt(MESSAGES[language]["final"] + result));
       break;
     case "2":
       result = subtract(firstNum, secondNum);
-      console.log(prompt(`The result is: ${result}`));
+      console.log(prompt(MESSAGES[language]["final"] + result));
       break;
     case "3":
       result = multiply(firstNum, secondNum);
-      console.log(prompt(`The result is: ${result}`));
+      console.log(prompt(MESSAGES[language]["final"] + result));
       break;
     case "4":
       result = divide(firstNum, secondNum);
-      console.log(prompt(`The result is: ${result}`));
+      console.log(prompt(MESSAGES[language]["final"] + result));
       break;
   }
 
-  keepGoing = rlSync.question(
-    'Would you like to continue? Enter "y" for yes and "n" for no.'
-  );
+  keepGoing = rlSync.question(MESSAGES[language]["more"]); //Asks the user if they want to do more calculations
 } while (keepGoing === "y");

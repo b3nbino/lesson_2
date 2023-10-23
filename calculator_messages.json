@@ -1,0 +1,10 @@
+{
+  "welcome": "Welcome to the Calculator!",
+  "firstNumberPrompt": "What's the first number?\n",
+  "secondNumberPrompt": "What's the second number?\n",
+  "invalidNumber": "Hmm... that doesn't look like a valid number.\n",
+  "operationPrompt": "What operation would you like to perform?\n1) Add 2) Subtract 3) Multiply 4) Divide\n",
+  "invalidOperation": "Must choose 1, 2, 3 or 4\n",
+  "final": "`The result is: ${result}`",
+  "more": "Would you like to continue? Enter \"y\" for yes and \"n\" for no."
+}

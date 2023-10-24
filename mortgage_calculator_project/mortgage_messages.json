@@ -1,0 +1,13 @@
+{
+  "greeting": "Hello! Welcome to the world famous DragonDuck Mortgage Calculator!\n    Please enter the following information to determine your monthly payment.",
+  "loanAsk": "Loan Amount: $",
+  "durationAsk": "Loan Duration/Term (months): ",
+  "interestAsk": "Yearly Interest Rate: %",
+  "invalidLoanDuration": "Input invalid. Please try again: ",
+  "invalidRate": "Input invalid. Please try again: %",
+  "paymentAmount": "It looks like your monthly payment will be $",
+  "perMonth": " per month.",
+  "redo": "Would you like to calculate again? If so please enter 'y' if not enter 'n'.",
+  "invalidRedo": "Invalid input. Please enter either 'y' or 'n'",
+  "goodbye": "Thank you for using DragonDuck Mortgage Calculator! Goodbye!"
+}

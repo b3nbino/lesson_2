@@ -1,9 +1,21 @@
 let rlSync = require("readline-sync");
+const MESSAGES = require("./mortgage_messages.json");
 let again = false;
 
 function invalidNumber(number) {
   //Tests user input for valid number
   return number.trimStart() === "" || Number.isNaN(Number(number));
+}
+function invalidYON(string) {
+  if (string !== "y" && string !== "n") {
+    return true;
+  } else if (string === "y") {
+    again = true;
+    return false;
+  } else {
+    again = false;
+    return false;
+  }
 }
 function prompt(message) {
   //Adds "=>" to indicate output
@@ -11,30 +23,24 @@ function prompt(message) {
   return message;
 }
 
-console.log(
-  prompt(
-    "Hello! Welcome to the world famous DragonDuck Mortgage Calculator!\n    Please enter the following information to determine your monthly payment."
-  )
-);
+console.log(prompt(MESSAGES["greeting"]));
 
 do {
-  let loanAmount = rlSync.question(prompt("Loan Amount: $")); //Gets user input for loanAmount and checks validation then makes it a number
+  let loanAmount = rlSync.question(prompt(MESSAGES["loanAsk"])); //Gets user input for loanAmount and checks validation then makes it a number
   while (invalidNumber(loanAmount)) {
-    loanAmount = rlSync.question(prompt("Input invalid. Please try again: "));
+    loanAmount = rlSync.question(prompt(MESSAGES["invalidLoanDuration"]));
   }
   loanAmount = parseFloat(loanAmount);
 
-  let loanTerm = rlSync.question(prompt("Loan Duration/Term (months): ")); //Gets user input for loanTerm and checks validation then makes it a number
+  let loanTerm = rlSync.question(prompt(MESSAGES["durationAsk"])); //Gets user input for loanTerm and checks validation then makes it a number
   while (invalidNumber(loanTerm)) {
-    loanTerm = rlSync.question(prompt("Input invalid. Please try again: "));
+    loanTerm = rlSync.question(prompt(MESSAGES["invalidLoanDuration"]));
   }
   loanTerm = Number(loanTerm);
 
-  let interestRate = rlSync.question(prompt("Yearly Interest Rate: %")); //Gets user input for interestRate and checks validation then makes it a number and percentage
+  let interestRate = rlSync.question(prompt(MESSAGES["interestAsk"])); //Gets user input for interestRate and checks validation then makes it a number and percentage
   while (invalidNumber(interestRate)) {
-    interestRate = rlSync.question(
-      prompt("Input invalid. Please try again: %")
-    );
+    interestRate = rlSync.question(prompt(MESSAGES["invalidRate"]));
   }
   interestRate = parseFloat(interestRate) / 100;
   let monthlyInterestRate = interestRate / 12;
@@ -46,30 +52,28 @@ do {
   }
 
   console.log(
+    //Display paymentAmount based on user input
     prompt(
-      `It looks like your monthly payment will be $${calculateMortgage(
-        loanAmount,
-        loanTerm,
-        monthlyInterestRate
-      ).toFixed(2)} per month.`
+      MESSAGES["paymentAmount"] +
+        calculateMortgage(loanAmount, loanTerm, monthlyInterestRate).toFixed(
+          2
+        ) +
+        MESSAGES["perMonth"]
     )
   );
-
-  let finish = rlSync.question(
-    prompt(
-      "Would you like to calculate again? If so please enter 'y' if not enter 'n'."
-    )
-  );
-  if (finish === "y") {
-    again = true;
-  } else if (finish === "n") {
-    again = false;
-  } else {
-    finish = rlSync.question(
-      prompt('Invalid input. Please enter either "y" or "n"')
-    );
-  }
+  //Ask user to calculate again and test input validity
+  let isInvalid = true;
+  let finish = rlSync.question(prompt(MESSAGES["redo"]));
+  do {
+    if (finish === "y") {
+      again = true;
+    } else if (finish === "n") {
+      again = false;
+    } else {
+      while (invalidYON(finish)) {
+        finish = rlSync.question(prompt(MESSAGES["invalidRedo"]));
+      }
+    }
+  } while (invalidYON(finish));
 } while (again);
-console.log(
-  prompt("Thank you for using DragonDuck Mortgage Calculator! Goodbye!")
-);
+console.log(prompt(MESSAGES["goodbye"]));

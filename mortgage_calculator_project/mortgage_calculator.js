@@ -18,7 +18,7 @@ function invalidYON(string) {
   }
 }
 function prompt(message) {
-  //Adds "=>" to indicate output
+  //Adds "-->" to indicate output
   message = `-->` + message;
   return message;
 }
